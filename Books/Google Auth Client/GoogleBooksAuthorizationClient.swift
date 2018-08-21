@@ -19,11 +19,12 @@ final class GoogleBooksAuthorizationClient {
     
     static let shared = GoogleBooksAuthorizationClient()
     
-    init() {
+    init()
+    {
         loadGTMAuthState()
     }
     
-    func getAuthorizationStatus() -> Bool
+    func isAuthorized() -> Bool
     {
         return authorization == nil ? false : true
     }
@@ -62,6 +63,7 @@ final class GoogleBooksAuthorizationClient {
                     return
                 }
                 self.authorization = GTMAppAuthFetcherAuthorization(authState: authState)
+                completion(nil)
             }
         }
     }

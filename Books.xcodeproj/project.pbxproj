@@ -22,6 +22,7 @@
 		ACFC41A3212C74F3001AE418 /* SearchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A2212C74F3001AE418 /* SearchCollectionViewController.swift */; };
 		ACFC41A5212C789B001AE418 /* GoogleAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A4212C789B001AE418 /* GoogleAuthViewController.swift */; };
 		ACFC41A7212C87D3001AE418 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A6212C87D3001AE418 /* Extensions.swift */; };
+		ACFC41AC212CA1C1001AE418 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACFC41AB212CA1C0001AE418 /* Default-568h@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,6 +56,7 @@
 		ACFC41A2212C74F3001AE418 /* SearchCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewController.swift; sourceTree = "<group>"; };
 		ACFC41A4212C789B001AE418 /* GoogleAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthViewController.swift; sourceTree = "<group>"; };
 		ACFC41A6212C87D3001AE418 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		ACFC41AB212CA1C0001AE418 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 		ACFC4169212C6A1D001AE418 = {
 			isa = PBXGroup;
 			children = (
+				ACFC41AB212CA1C0001AE418 /* Default-568h@2x.png */,
 				ACFC4174212C6A1D001AE418 /* Books */,
 				ACFC4173212C6A1D001AE418 /* Products */,
 			);
@@ -216,6 +219,7 @@
 			files = (
 				ACFC4180212C6A20001AE418 /* LaunchScreen.storyboard in Resources */,
 				ACFC417D212C6A20001AE418 /* Assets.xcassets in Resources */,
+				ACFC41AC212CA1C1001AE418 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,7 +378,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Books/Frameworks",
 				);
-				INFOPLIST_FILE = Books/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Books/Ressources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -396,7 +400,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Books/Frameworks",
 				);
-				INFOPLIST_FILE = Books/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Books/Ressources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

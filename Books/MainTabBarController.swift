@@ -21,7 +21,7 @@ class MainTabBarController: UITabBarController
     
     private func checkIfAuthorized()
     {
-        if !GoogleBooksAuthorizationClient.shared.getAuthorizationStatus()
+        if !GoogleBooksAuthorizationClient.shared.isAuthorized()
         {
             DispatchQueue.main.async {
                 let googleAuthViewController = GoogleAuthViewController()
