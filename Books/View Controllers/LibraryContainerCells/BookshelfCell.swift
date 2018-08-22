@@ -17,6 +17,7 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
 {
     let cellId = "bookCell"
     weak var delegate: BookshelfCellDelegate?
+    var bookController: BookController?
     
     lazy var collectionView: UICollectionView =
     {

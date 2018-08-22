@@ -35,7 +35,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     {
         super.viewDidLoad()
         
-        navigationItem.title = "Reading now"
+        navigationItem.title = "Favourites"
         
         setupCollectionView()
         
@@ -63,7 +63,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     
     private func setTitle(for index: Int)
     {
-        let titles = ["Reading now", "To read", "Have read", "Favourites"]
+        let titles = ["Favourites", "Reading now", "To read", "Have read"]
         navigationItem.title = titles[index]
     }
     
@@ -85,6 +85,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! BookshelfCell
         
         cell.delegate = self
+        cell.bookController = self.bookController
         
         return cell
     }
@@ -93,19 +94,19 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     {
         if index == 1
         {
-            return toReadId
+            return readingNowId
         }
         else if index == 2
         {
-            return haveReadId
+            return toReadId
         }
         else if index == 3
         {
-            return favouritesId
+            return haveReadId
         }
         else
         {
-            return readingNowId
+            return favouritesId
         }
     }
     

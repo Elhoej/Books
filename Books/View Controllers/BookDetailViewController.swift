@@ -85,7 +85,8 @@ class BookDetailViewController: UIViewController
     
     let bookshelfSegmentedControl: UISegmentedControl =
     {
-        let sc = UISegmentedControl(items: ["Reading now", "To read", "Have read", "Favourites"])
+        let sc = UISegmentedControl(items: ["Favourites", "Reading now", "To read", "Have read"])
+        sc.selectedSegmentIndex = 0
         
         return sc
     }()
@@ -144,7 +145,31 @@ class BookDetailViewController: UIViewController
     
     @objc private func handleSave()
     {
+        guard let id = book?.id, let title = book?.volumeInfo?.title else {
+            showAlert(with: "Couldn't find book ID, please restart the app and try again.")
+            return
+        }
         
+        let index = bookshelfSegmentedControl.selectedSegmentIndex
+        let bookshelf = String(bookshelfSegmentedControl.selectedSegmentIndex)
+        
+        bookController?.addBookToBookshelf(with: id, on: bookshelf, completion: { (error) in
+            
+            if error != nil
+            {
+                self.showAlert(with: "Something went wrong when adding the book to your bookshelf, please try again!")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                let alert = UIAlertController(title: "Successfully added \(title) to \(self.bookshelfSegmentedControl.titleForSegment(at: index) ?? "")", message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Okay", style: .default, handler: { (_) in
+                    
+                    self.navigationController?.popViewController(animated: true)
+                }))
+                self.present(alert, animated: true, completion: nil)
+            }
+        })
     }
     
     private func updateViews(with book: BookRepresentation)
