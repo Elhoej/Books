@@ -14,7 +14,11 @@ class MainTabBarController: UITabBarController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        GoogleBooksAuthorizationClient.shared.resetAuthorization()
+
+        tabBar.isTranslucent = false
+        tabBar.tintColor = .backgroundColor
+        tabBar.unselectedItemTintColor = .lightGray
+        
         checkIfAuthorized()
         setupViewControllers()
     }
@@ -33,6 +37,8 @@ class MainTabBarController: UITabBarController
     private func setupViewControllers()
     {
         let libraryLayout = UICollectionViewFlowLayout()
+        libraryLayout.scrollDirection = .horizontal
+        libraryLayout.minimumLineSpacing = 0
         let libraryCollectionViewController = LibraryCollectionViewController(collectionViewLayout: libraryLayout)
         let libraryNavController = UINavigationController(rootViewController: libraryCollectionViewController)
         libraryNavController.navigationBar.isTranslucent = false
@@ -41,11 +47,13 @@ class MainTabBarController: UITabBarController
         
         let searchLayout = UICollectionViewFlowLayout()
         let searchCollectionViewController = SearchCollectionViewController(collectionViewLayout: searchLayout)
-        searchCollectionViewController.tabBarItem.title = "Search"
-        searchCollectionViewController.tabBarItem.image = UIImage(named: "search")
+        let searchNavController = UINavigationController(rootViewController: searchCollectionViewController)
+        searchNavController.navigationBar.isTranslucent = false
+        searchNavController.tabBarItem.title = "Search"
+        searchNavController.tabBarItem.image = UIImage(named: "search")
         
         
-        viewControllers = [libraryNavController, searchCollectionViewController]
+        viewControllers = [libraryNavController, searchNavController]
     }
 
 }

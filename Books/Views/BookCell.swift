@@ -13,7 +13,7 @@ class BookCell: UICollectionViewCell
     let coverImageView: UIImageView =
     {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFill
+        iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
 
         return iv
@@ -22,7 +22,8 @@ class BookCell: UICollectionViewCell
     let titleLabel: UILabel =
     {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textAlignment = .center
         
         return label
     }()
@@ -30,8 +31,9 @@ class BookCell: UICollectionViewCell
     let authorLabel: UILabel =
     {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .darkGray
+        label.textAlignment = .center
         
         return label
     }()
@@ -50,11 +52,11 @@ class BookCell: UICollectionViewCell
         addSubview(titleLabel)
         addSubview(authorLabel)
         
-        coverImageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, paddingBottom: -50, width: 0, height: 0)
+        coverImageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 12, paddingLeft: 12, paddingRight: 12, paddingBottom: -50, width: 0, height: 0)
         
-        titleLabel.anchor(top: coverImageView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 8, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: 0, height: 30)
+        titleLabel.anchor(top: coverImageView.bottomAnchor, left: leftAnchor, bottom: nil, right: rightAnchor, paddingTop: 1, paddingLeft: 12, paddingRight: 12, paddingBottom: 0, width: 0, height: 30)
         
-        authorLabel.anchor(top: titleLabel.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 8, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: 0, height: 0)
+        authorLabel.anchor(top: titleLabel.bottomAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 1, paddingLeft: 12, paddingRight: 12, paddingBottom: 0, width: 0, height: 0)
     }
     
     
