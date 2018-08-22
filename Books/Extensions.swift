@@ -93,6 +93,7 @@ extension UIColor
     }
     
     static let googleBlue = UIColor.rgb(red: 66, green: 133, blue: 244)
+    static let backgroundColor = UIColor.rgb(red: 255, green: 238, blue: 200)
 }
 
 extension UIView

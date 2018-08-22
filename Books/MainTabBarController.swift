@@ -35,6 +35,7 @@ class MainTabBarController: UITabBarController
         let libraryLayout = UICollectionViewFlowLayout()
         let libraryCollectionViewController = LibraryCollectionViewController(collectionViewLayout: libraryLayout)
         let libraryNavController = UINavigationController(rootViewController: libraryCollectionViewController)
+        libraryNavController.navigationBar.isTranslucent = false
         libraryNavController.tabBarItem.title = "Library"
         libraryNavController.tabBarItem.image = UIImage(named: "literature")
         

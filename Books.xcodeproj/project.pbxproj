@@ -12,29 +12,37 @@
 		ACFC417D212C6A20001AE418 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACFC417C212C6A20001AE418 /* Assets.xcassets */; };
 		ACFC4180212C6A20001AE418 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ACFC417E212C6A20001AE418 /* LaunchScreen.storyboard */; };
 		ACFC4188212C6D7C001AE418 /* GoogleBooksAuthorizationClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC4187212C6D7C001AE418 /* GoogleBooksAuthorizationClient.swift */; };
-		ACFC4197212C72B0001AE418 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC418B212C7227001AE418 /* AppAuth.framework */; };
-		ACFC4198212C72B0001AE418 /* AppAuth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC418B212C7227001AE418 /* AppAuth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		ACFC4199212C72B0001AE418 /* GTMAppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC418C212C7227001AE418 /* GTMAppAuth.framework */; };
-		ACFC419A212C72B0001AE418 /* GTMAppAuth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC418C212C7227001AE418 /* GTMAppAuth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		ACFC419B212C72B0001AE418 /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC418A212C7227001AE418 /* GTMSessionFetcher.framework */; };
-		ACFC419C212C72B0001AE418 /* GTMSessionFetcher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC418A212C7227001AE418 /* GTMSessionFetcher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		ACFC41A1212C74AD001AE418 /* LibraryCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A0212C74AD001AE418 /* LibraryCollectionViewController.swift */; };
 		ACFC41A3212C74F3001AE418 /* SearchCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A2212C74F3001AE418 /* SearchCollectionViewController.swift */; };
 		ACFC41A5212C789B001AE418 /* GoogleAuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A4212C789B001AE418 /* GoogleAuthViewController.swift */; };
 		ACFC41A7212C87D3001AE418 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41A6212C87D3001AE418 /* Extensions.swift */; };
 		ACFC41AC212CA1C1001AE418 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ACFC41AB212CA1C0001AE418 /* Default-568h@2x.png */; };
+		ACFC41AF212CA871001AE418 /* Book.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41AD212CA871001AE418 /* Book.xcdatamodeld */; };
+		ACFC41B1212D70F4001AE418 /* Book+Convenience.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41B0212D70F4001AE418 /* Book+Convenience.swift */; };
+		ACFC41B3212D713A001AE418 /* BookRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41B2212D713A001AE418 /* BookRepresentation.swift */; };
+		ACFC41B5212D7CB7001AE418 /* BookCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41B4212D7CB7001AE418 /* BookCell.swift */; };
+		ACFC41D7212D8FFD001AE418 /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D4212D8FFB001AE418 /* GTMSessionFetcher.framework */; };
+		ACFC41D8212D8FFD001AE418 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D5212D8FFC001AE418 /* AppAuth.framework */; };
+		ACFC41D9212D8FFD001AE418 /* GTMAppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D6212D8FFD001AE418 /* GTMAppAuth.framework */; };
+		ACFC41DA212D9000001AE418 /* AppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D5212D8FFC001AE418 /* AppAuth.framework */; };
+		ACFC41DB212D9000001AE418 /* AppAuth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D5212D8FFC001AE418 /* AppAuth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ACFC41DC212D9000001AE418 /* GTMAppAuth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D6212D8FFD001AE418 /* GTMAppAuth.framework */; };
+		ACFC41DD212D9000001AE418 /* GTMAppAuth.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D6212D8FFD001AE418 /* GTMAppAuth.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ACFC41DE212D9000001AE418 /* GTMSessionFetcher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D4212D8FFB001AE418 /* GTMSessionFetcher.framework */; };
+		ACFC41DF212D9000001AE418 /* GTMSessionFetcher.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = ACFC41D4212D8FFB001AE418 /* GTMSessionFetcher.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		ACFC41E1212D9C33001AE418 /* BookshelfBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41E0212D9C33001AE418 /* BookshelfBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		ACFC419D212C72B0001AE418 /* Embed Frameworks */ = {
+		ACFC41D3212D8FD7001AE418 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				ACFC4198212C72B0001AE418 /* AppAuth.framework in Embed Frameworks */,
-				ACFC419C212C72B0001AE418 /* GTMSessionFetcher.framework in Embed Frameworks */,
-				ACFC419A212C72B0001AE418 /* GTMAppAuth.framework in Embed Frameworks */,
+				ACFC41DB212D9000001AE418 /* AppAuth.framework in Embed Frameworks */,
+				ACFC41DF212D9000001AE418 /* GTMSessionFetcher.framework in Embed Frameworks */,
+				ACFC41DD212D9000001AE418 /* GTMAppAuth.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -49,14 +57,19 @@
 		ACFC417F212C6A20001AE418 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ACFC4181212C6A20001AE418 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACFC4187212C6D7C001AE418 /* GoogleBooksAuthorizationClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleBooksAuthorizationClient.swift; sourceTree = "<group>"; };
-		ACFC418A212C7227001AE418 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GTMSessionFetcher.framework; sourceTree = "<group>"; };
-		ACFC418B212C7227001AE418 /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppAuth.framework; sourceTree = "<group>"; };
-		ACFC418C212C7227001AE418 /* GTMAppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GTMAppAuth.framework; sourceTree = "<group>"; };
 		ACFC41A0212C74AD001AE418 /* LibraryCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCollectionViewController.swift; sourceTree = "<group>"; };
 		ACFC41A2212C74F3001AE418 /* SearchCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCollectionViewController.swift; sourceTree = "<group>"; };
 		ACFC41A4212C789B001AE418 /* GoogleAuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleAuthViewController.swift; sourceTree = "<group>"; };
 		ACFC41A6212C87D3001AE418 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		ACFC41AB212CA1C0001AE418 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		ACFC41AE212CA871001AE418 /* Book.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Book.xcdatamodel; sourceTree = "<group>"; };
+		ACFC41B0212D70F4001AE418 /* Book+Convenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Book+Convenience.swift"; sourceTree = "<group>"; };
+		ACFC41B2212D713A001AE418 /* BookRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRepresentation.swift; sourceTree = "<group>"; };
+		ACFC41B4212D7CB7001AE418 /* BookCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCell.swift; sourceTree = "<group>"; };
+		ACFC41D4212D8FFB001AE418 /* GTMSessionFetcher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GTMSessionFetcher.framework; sourceTree = "<group>"; };
+		ACFC41D5212D8FFC001AE418 /* AppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AppAuth.framework; sourceTree = "<group>"; };
+		ACFC41D6212D8FFD001AE418 /* GTMAppAuth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GTMAppAuth.framework; sourceTree = "<group>"; };
+		ACFC41E0212D9C33001AE418 /* BookshelfBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,9 +77,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACFC4197212C72B0001AE418 /* AppAuth.framework in Frameworks */,
-				ACFC419B212C72B0001AE418 /* GTMSessionFetcher.framework in Frameworks */,
-				ACFC4199212C72B0001AE418 /* GTMAppAuth.framework in Frameworks */,
+				ACFC41DA212D9000001AE418 /* AppAuth.framework in Frameworks */,
+				ACFC41D8212D8FFD001AE418 /* AppAuth.framework in Frameworks */,
+				ACFC41D9212D8FFD001AE418 /* GTMAppAuth.framework in Frameworks */,
+				ACFC41DC212D9000001AE418 /* GTMAppAuth.framework in Frameworks */,
+				ACFC41DE212D9000001AE418 /* GTMSessionFetcher.framework in Frameworks */,
+				ACFC41D7212D8FFD001AE418 /* GTMSessionFetcher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +95,7 @@
 				ACFC41AB212CA1C0001AE418 /* Default-568h@2x.png */,
 				ACFC4174212C6A1D001AE418 /* Books */,
 				ACFC4173212C6A1D001AE418 /* Products */,
+				ACFC41C9212D8FC9001AE418 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,21 +116,12 @@
 				ACFC419E212C746A001AE418 /* View Controllers */,
 				ACFC4177212C6A1D001AE418 /* MainTabBarController.swift */,
 				ACFC41A6212C87D3001AE418 /* Extensions.swift */,
+				ACFC4175212C6A1D001AE418 /* AppDelegate.swift */,
 				ACFC417C212C6A20001AE418 /* Assets.xcassets */,
+				ACFC41B6212D8F82001AE418 /* Frameworks */,
 				ACFC41AA212C9BF1001AE418 /* Ressources */,
-				ACFC4189212C7218001AE418 /* Frameworks */,
 			);
 			path = Books;
-			sourceTree = "<group>";
-		};
-		ACFC4189212C7218001AE418 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				ACFC418B212C7227001AE418 /* AppAuth.framework */,
-				ACFC418C212C7227001AE418 /* GTMAppAuth.framework */,
-				ACFC418A212C7227001AE418 /* GTMSessionFetcher.framework */,
-			);
-			path = Frameworks;
 			sourceTree = "<group>";
 		};
 		ACFC419E212C746A001AE418 /* View Controllers */ = {
@@ -122,6 +130,8 @@
 				ACFC41A0212C74AD001AE418 /* LibraryCollectionViewController.swift */,
 				ACFC41A2212C74F3001AE418 /* SearchCollectionViewController.swift */,
 				ACFC41A4212C789B001AE418 /* GoogleAuthViewController.swift */,
+				ACFC41B4212D7CB7001AE418 /* BookCell.swift */,
+				ACFC41E0212D9C33001AE418 /* BookshelfBar.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -137,6 +147,9 @@
 		ACFC41A8212C9BDA001AE418 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				ACFC41AD212CA871001AE418 /* Book.xcdatamodeld */,
+				ACFC41B0212D70F4001AE418 /* Book+Convenience.swift */,
+				ACFC41B2212D713A001AE418 /* BookRepresentation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -151,11 +164,27 @@
 		ACFC41AA212C9BF1001AE418 /* Ressources */ = {
 			isa = PBXGroup;
 			children = (
-				ACFC4175212C6A1D001AE418 /* AppDelegate.swift */,
 				ACFC4181212C6A20001AE418 /* Info.plist */,
 				ACFC417E212C6A20001AE418 /* LaunchScreen.storyboard */,
 			);
 			path = Ressources;
+			sourceTree = "<group>";
+		};
+		ACFC41B6212D8F82001AE418 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				ACFC41D5212D8FFC001AE418 /* AppAuth.framework */,
+				ACFC41D6212D8FFD001AE418 /* GTMAppAuth.framework */,
+				ACFC41D4212D8FFB001AE418 /* GTMSessionFetcher.framework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
+		ACFC41C9212D8FC9001AE418 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,7 +197,7 @@
 				ACFC416E212C6A1D001AE418 /* Sources */,
 				ACFC416F212C6A1D001AE418 /* Frameworks */,
 				ACFC4170212C6A1D001AE418 /* Resources */,
-				ACFC419D212C72B0001AE418 /* Embed Frameworks */,
+				ACFC41D3212D8FD7001AE418 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -231,9 +260,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACFC41A5212C789B001AE418 /* GoogleAuthViewController.swift in Sources */,
+				ACFC41B1212D70F4001AE418 /* Book+Convenience.swift in Sources */,
+				ACFC41B5212D7CB7001AE418 /* BookCell.swift in Sources */,
 				ACFC41A3212C74F3001AE418 /* SearchCollectionViewController.swift in Sources */,
+				ACFC41B3212D713A001AE418 /* BookRepresentation.swift in Sources */,
 				ACFC41A1212C74AD001AE418 /* LibraryCollectionViewController.swift in Sources */,
 				ACFC4188212C6D7C001AE418 /* GoogleBooksAuthorizationClient.swift in Sources */,
+				ACFC41E1212D9C33001AE418 /* BookshelfBar.swift in Sources */,
+				ACFC41AF212CA871001AE418 /* Book.xcdatamodeld in Sources */,
 				ACFC4178212C6A1D001AE418 /* MainTabBarController.swift in Sources */,
 				ACFC4176212C6A1D001AE418 /* AppDelegate.swift in Sources */,
 				ACFC41A7212C87D3001AE418 /* Extensions.swift in Sources */,
@@ -434,6 +468,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		ACFC41AD212CA871001AE418 /* Book.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				ACFC41AE212CA871001AE418 /* Book.xcdatamodel */,
+			);
+			currentVersion = ACFC41AE212CA871001AE418 /* Book.xcdatamodel */;
+			path = Book.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = ACFC416A212C6A1D001AE418 /* Project object */;
 }
