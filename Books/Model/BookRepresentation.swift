@@ -8,29 +8,84 @@
 
 import Foundation
 
-struct BookRepresentation
+struct BookRepresentation: Codable
 {
-    let id: String
-    let publishedDate: String
-    let publisher: String
-    let averageRating: Float
-    let pageCount: Int16
-    let bookDescription: String
-    let imageLinks: [ImageLink]
-    let volumeInfo: [VolumeInfo]
-    let bookshelf: String?
+    let id: String?
+    let volumeInfo: VolumeInfo?
     
-    struct ImageLink
+    enum CodingKeys: String, CodingKey
     {
-        let thumbnail: String?
-        let medium: String?
+        case id = "id"
+        case volumeInfo = "volumeInfo"
     }
     
-    struct VolumeInfo
+    init(from decoder: Decoder) throws
+    {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decodeIfPresent(String.self, forKey: .id)
+        volumeInfo = try container.decodeIfPresent(VolumeInfo.self, forKey: .volumeInfo)
+    }
+    
+    struct VolumeInfo: Codable
     {
         let title: String?
-        let author: [String]
+        let authors: [String]?
+        let publishedDate: String?
+        let publisher: String?
+        let averageRating: Float?
+        let pageCount: Int16?
+        let bookDescription: String?
+        let imageLinks: ImageLink?
+        
+        enum CodingKeys: String, CodingKey
+        {
+            case title = "title"
+            case authors = "authors"
+            case publishedDate = "publishedDate"
+            case publisher = "publisher"
+            case averageRating = "averageRating"
+            case pageCount = "pageCount"
+            case bookDescription = "description"
+            case imageLinks = "imageLinks"
+        }
+        
+        init(from decoder: Decoder) throws
+        {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            title = try container.decodeIfPresent(String.self, forKey: .title)
+            authors = try container.decodeIfPresent([String].self, forKey: .authors)
+            publishedDate = try container.decodeIfPresent(String.self, forKey: .publishedDate)
+            publisher = try container.decodeIfPresent(String.self, forKey: .publisher)
+            averageRating = try container.decodeIfPresent(Float.self, forKey: .averageRating)
+            pageCount = try container.decodeIfPresent(Int16.self, forKey: .pageCount)
+            bookDescription = try container.decodeIfPresent(String.self, forKey: .bookDescription)
+            imageLinks = try container.decodeIfPresent(ImageLink.self, forKey: .imageLinks)
+        }
+        
+        struct ImageLink: Codable
+        {
+            let thumbnail: String?
+            let medium: String?
+            
+            enum CodingKeys: String, CodingKey
+            {
+                case thumbnail = "thumbnail"
+                case medium = "medium"
+            }
+            
+            init(from decoder: Decoder) throws
+            {
+                let container = try decoder.container(keyedBy: CodingKeys.self)
+                thumbnail = try container.decodeIfPresent(String.self, forKey: .thumbnail)
+                medium = try container.decodeIfPresent(String.self, forKey: .medium)
+            }
+        }
     }
+}
+
+struct BookRepresentations: Codable
+{
+    let items: [BookRepresentation]
 }
 
 //func !=(lhs: Book, rhs: BookRepresentation) -> Bool

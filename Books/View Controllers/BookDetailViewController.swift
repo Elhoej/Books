@@ -10,6 +10,16 @@ import UIKit
 
 class BookDetailViewController: UIViewController
 {
+    var bookController: BookController?
+    var book: BookRepresentation?
+    {
+        didSet
+        {
+            guard let book = book else { return }
+            updateViews(with: book)
+        }
+    }
+    
     let scrollView: UIScrollView =
     {
         let sv = UIScrollView()
@@ -33,8 +43,8 @@ class BookDetailViewController: UIViewController
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 36)
         label.sizeToFit()
-        label.text = "Description"
         label.textColor = .black
+        label.numberOfLines = 0
         
         return label
     }()
@@ -45,7 +55,7 @@ class BookDetailViewController: UIViewController
         label.font = UIFont.systemFont(ofSize: 16)
         label.textColor = .darkGray
         label.sizeToFit()
-        label.text = "Description"
+        label.numberOfLines = 0
         
         return label
     }()
@@ -54,10 +64,10 @@ class BookDetailViewController: UIViewController
     {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-//        label.textColor = .darkGray
         label.textAlignment = .right
+        label.textColor = .darkGray
         label.sizeToFit()
-        label.text = "Description"
+        label.numberOfLines = 0
         
         return label
     }()
@@ -66,10 +76,9 @@ class BookDetailViewController: UIViewController
     {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
-        //        label.textColor = .darkGray
+        label.textColor = .darkGray
         label.textAlignment = .center
         label.sizeToFit()
-        label.text = "Description"
         
         return label
     }()
@@ -95,9 +104,6 @@ class BookDetailViewController: UIViewController
         let tv = UITextView()
         tv.isEditable = false
         tv.font = UIFont.systemFont(ofSize: 14)
-//        tv.layer.borderColor = UIColor.barColor.cgColor
-//        tv.layer.borderWidth = 1
-        tv.text = "Description"
         tv.backgroundColor = .backgroundColor
     
         return tv
@@ -109,7 +115,8 @@ class BookDetailViewController: UIViewController
         tv.font = UIFont.systemFont(ofSize: 14)
         tv.layer.borderColor = UIColor.barColor.cgColor
         tv.layer.borderWidth = 1
-        tv.text = "Description"
+        tv.layer.cornerRadius = 4
+        tv.layer.masksToBounds = true
         tv.backgroundColor = .backgroundColor
         
         return tv
@@ -118,7 +125,7 @@ class BookDetailViewController: UIViewController
     let bookReviewTitleLabel: UILabel =
     {
         let label = UILabel()
-        label.text = "Review"
+        label.text = "Write a review"
         label.font = UIFont.boldSystemFont(ofSize: 22)
         
         return label
@@ -140,6 +147,20 @@ class BookDetailViewController: UIViewController
         
     }
     
+    private func updateViews(with book: BookRepresentation)
+    {
+        if let urlString = book.volumeInfo?.imageLinks?.thumbnail
+        {
+            coverImageView.loadImageUsingCacheWithUrlString(urlString)
+        }
+
+        titleLabel.text = book.volumeInfo?.title
+        authorLabel.text = book.volumeInfo?.authors![0]
+        dateLabel.text = book.volumeInfo?.publishedDate
+        publisherLabel.text = book.volumeInfo?.publisher
+        bookDescriptionTextView.text = book.volumeInfo?.bookDescription
+    }
+    
     private func setupViews()
     {
         let width = view.frame.width - 24
@@ -157,8 +178,7 @@ class BookDetailViewController: UIViewController
         
         coverImageView.anchor(top: scrollView.topAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: view.frame.width, height: 300)
         
-        titleLabel.anchor(top: nil, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: 0, height: 0)
-        titleLabel.centerYAnchor.constraint(equalTo: coverImageView.bottomAnchor).isActive = true
+        titleLabel.anchor(top: coverImageView.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 8, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 0)
         
         let horizontalStackView = UIStackView(arrangedSubviews: [authorLabel, dateLabel, publisherLabel])
         horizontalStackView.axis = .horizontal
@@ -166,7 +186,7 @@ class BookDetailViewController: UIViewController
         horizontalStackView.spacing = 0
         
         scrollView.addSubview(horizontalStackView)
-        horizontalStackView.anchor(top: titleLabel.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 25)
+        horizontalStackView.anchor(top: titleLabel.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 40)
         
         bookshelfSegmentedControl.anchor(top: horizontalStackView.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 22, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 30)
         

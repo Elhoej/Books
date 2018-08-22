@@ -23,13 +23,13 @@ extension Book
     {
         self.init(context: context)
         self.id = bookRepresentation.id
-        self.publisher = bookRepresentation.publisher
-        self.publishedDate = bookRepresentation.publishedDate
-        self.coverUrl = bookRepresentation.imageLinks[0].medium
-        self.thumbnailUrl = bookRepresentation.imageLinks[0].thumbnail
-        self.pageCount = bookRepresentation.pageCount
-        self.volumeInfo = bookRepresentation.volumeInfo as NSObject
-        self.bookshelf = bookRepresentation.bookshelf
-        self.averageRating = bookRepresentation.averageRating
+        self.publisher = bookRepresentation.volumeInfo?.publisher
+        self.publishedDate = bookRepresentation.volumeInfo?.publishedDate
+        self.coverUrl = bookRepresentation.volumeInfo?.imageLinks?.medium
+        self.thumbnailUrl = bookRepresentation.volumeInfo?.imageLinks?.thumbnail
+        self.pageCount = (bookRepresentation.volumeInfo?.pageCount)!
+//        self.volumeInfo = bookRepresentation.volumeInfo as NSObject
+//        self.bookshelf = bookRepresentation.bookshelf
+        self.averageRating = (bookRepresentation.volumeInfo?.averageRating)!
     }
 }

@@ -16,6 +16,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         navigationController?.pushViewController(bookDetailViewController, animated: true)
     }
     
+    var bookController: BookController?
     let readingNowId = "readingNowId"
     let toReadId = "toReadId"
     let haveReadId = "haveReadId"
@@ -34,7 +35,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     {
         super.viewDidLoad()
         
-        title = "Reading now"
+        navigationItem.title = "Reading now"
         
         setupCollectionView()
         
@@ -63,7 +64,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     private func setTitle(for index: Int)
     {
         let titles = ["Reading now", "To read", "Have read", "Favourites"]
-        title = titles[index]
+        navigationItem.title = titles[index]
     }
     
     private func setupBookshelfBar()

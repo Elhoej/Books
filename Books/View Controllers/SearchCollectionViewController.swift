@@ -11,10 +11,12 @@ import UIKit
 class SearchCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate
 {
     let cellId = "bookCell"
+    var bookController: BookController?
     
-    let searchBar: UISearchBar =
+    lazy var searchBar: UISearchBar =
     {
         let sb = UISearchBar()
+        sb.delegate = self
         sb.placeholder = "Search for books"
         sb.barTintColor = .barColor
         sb.setBackgroundImage(UIImage(), for: .any, barMetrics: UIBarMetrics.default)
@@ -37,30 +39,56 @@ class SearchCollectionViewController: UICollectionViewController, UICollectionVi
     {
         collectionView?.backgroundColor = .backgroundColor
         collectionView?.register(BookCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView?.contentInset = UIEdgeInsetsMake(45, 0, 0, 0)
-        collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 0, 0)
+        collectionView?.contentInset = UIEdgeInsetsMake(45, 0, 5, 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(45, 0, 5, 0)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
     {
-        //call bookcontroller.search
-        searchBar.resignFirstResponder()
+        guard let searchTerm = searchBar.text, !searchTerm.isEmpty else { return }
+        bookController?.searchForBook(with: searchTerm, completion: { (error) in
+            
+            if error != nil
+            {
+                self.showAlert(with: "An error occured while searching for \(searchBar), please try again!")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.searchBar.resignFirstResponder()
+                self.collectionView?.reloadData()
+            }
+        })
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return 4
+        return bookController?.searchedBooks.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BookCell
 
-        cell.coverImageView.image = #imageLiteral(resourceName: "books-background")
-        cell.authorLabel.text = "Simon elhoej steinmejer"
-        cell.titleLabel.text = "Hihahuhe vol. 2"
+        let book = bookController?.searchedBooks[indexPath.item]
+        
+        if let urlString = book?.volumeInfo?.imageLinks?.thumbnail
+        {
+            cell.coverImageView.loadImageUsingCacheWithUrlString(urlString)
+        }
+        cell.authorLabel.text = book?.volumeInfo?.authors![0]
+        cell.titleLabel.text = book?.volumeInfo?.title
         
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    {
+        let book = bookController?.searchedBooks[indexPath.item]
+        let bookDetailViewController = BookDetailViewController()
+        bookDetailViewController.bookController = self.bookController
+        bookDetailViewController.book = book
+        navigationController?.pushViewController(bookDetailViewController, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize

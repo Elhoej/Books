@@ -24,6 +24,7 @@ class BookCell: UICollectionViewCell
         let label = UILabel()
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textAlignment = .center
+        label.numberOfLines = 0
         
         return label
     }()
@@ -34,6 +35,7 @@ class BookCell: UICollectionViewCell
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = .darkGray
         label.textAlignment = .center
+        label.numberOfLines = 0
         
         return label
     }()

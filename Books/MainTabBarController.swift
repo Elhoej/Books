@@ -10,7 +10,8 @@ import UIKit
 
 class MainTabBarController: UITabBarController
 {
-
+    let bookController = BookController()
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -40,6 +41,7 @@ class MainTabBarController: UITabBarController
         libraryLayout.scrollDirection = .horizontal
         libraryLayout.minimumLineSpacing = 0
         let libraryCollectionViewController = LibraryCollectionViewController(collectionViewLayout: libraryLayout)
+        libraryCollectionViewController.bookController = self.bookController
         let libraryNavController = UINavigationController(rootViewController: libraryCollectionViewController)
         libraryNavController.navigationBar.isTranslucent = false
         libraryNavController.tabBarItem.title = "Library"
@@ -47,6 +49,7 @@ class MainTabBarController: UITabBarController
         
         let searchLayout = UICollectionViewFlowLayout()
         let searchCollectionViewController = SearchCollectionViewController(collectionViewLayout: searchLayout)
+        searchCollectionViewController.bookController = self.bookController
         let searchNavController = UINavigationController(rootViewController: searchCollectionViewController)
         searchNavController.navigationBar.isTranslucent = false
         searchNavController.tabBarItem.title = "Search"
