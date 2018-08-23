@@ -65,19 +65,16 @@ struct BookRepresentation: Codable
         struct ImageLink: Codable
         {
             let thumbnail: String?
-            let medium: String?
             
             enum CodingKeys: String, CodingKey
             {
                 case thumbnail = "thumbnail"
-                case medium = "medium"
             }
             
             init(from decoder: Decoder) throws
             {
                 let container = try decoder.container(keyedBy: CodingKeys.self)
                 thumbnail = try container.decodeIfPresent(String.self, forKey: .thumbnail)
-                medium = try container.decodeIfPresent(String.self, forKey: .medium)
             }
         }
     }
@@ -88,7 +85,7 @@ struct BookRepresentations: Codable
     let items: [BookRepresentation]?
 }
 
-//func !=(lhs: Book, rhs: BookRepresentation) -> Bool
-//{
-//    return lhs.title != rhs.title && lhs.id != rhs.id && lhs. != rhs.hasWatched
-//}
+func !=(lhs: Book, rhs: BookRepresentation) -> Bool
+{
+    return lhs.title != rhs.volumeInfo?.title && lhs.id != rhs.id && lhs.author != rhs.volumeInfo?.authors![0] && lhs.bookDescription != rhs.volumeInfo?.bookDescription && lhs.publishedDate != rhs.volumeInfo?.publishedDate && lhs.publisher != rhs.volumeInfo?.publisher && lhs.thumbnailUrl != rhs.volumeInfo?.imageLinks?.thumbnail
+}

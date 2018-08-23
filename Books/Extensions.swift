@@ -17,10 +17,10 @@ extension UIViewController
         view.addGestureRecognizer(tap)
     }
     
-    @objc func dismissKeyboard() {
+    @objc func dismissKeyboard()
+    {
         view.endEditing(true)
     }
-    
 }
 
 extension UIViewController
@@ -33,27 +33,12 @@ extension UIViewController
     }
 }
 
-extension UIView
-{
-    func setGradientBackground(colorOne: CGColor, colorTwo: CGColor)
-    {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = bounds
-        gradientLayer.colors = [colorOne, colorTwo, colorOne]
-        gradientLayer.locations = [0.0, 0.5, 1.0]
-        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
-        gradientLayer.endPoint = CGPoint(x: 0.2, y: 1.0)
-        
-        layer.insertSublayer(gradientLayer, at: 0)
-    }
-}
-
 let imageCache = NSCache<NSString, AnyObject>()
 
 extension UIImageView
 {
-    func loadImageUsingCacheWithUrlString(_ urlString: String, completion: (() -> ())? = nil) {
-        
+    func loadImageUsingCacheOrUrlString(_ urlString: String, completion: (() -> ())? = nil)
+    {
         self.image = nil
 
         if let cachedImage = imageCache.object(forKey: urlString as NSString) as? UIImage
@@ -67,8 +52,9 @@ extension UIImageView
         
         URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
 
-            if let error = error {
-                print(error)
+            if let error = error
+            {
+                NSLog("An error occured while downloading image from url: \(error)")
                 return
             }
             
@@ -76,7 +62,6 @@ extension UIImageView
                 
                 if let downloadedImage = UIImage(data: data!) {
                     imageCache.setObject(downloadedImage, forKey: urlString as NSString)
-                    
                     self.image = downloadedImage
                     completion?()
                 }

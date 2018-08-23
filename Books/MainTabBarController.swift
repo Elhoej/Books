@@ -8,20 +8,21 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController
+class MainTabBarController: UITabBarController, GoogleAuthViewControllerDelegate
 {
     let bookController = BookController()
+    var libraryCollectionViewController: LibraryCollectionViewController?
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
-
+        
         tabBar.isTranslucent = false
         tabBar.tintColor = .backgroundColor
         tabBar.unselectedItemTintColor = .lightGray
-        
-        checkIfAuthorized()
         setupViewControllers()
+
+        checkIfAuthorized()
     }
     
     private func checkIfAuthorized()
@@ -30,9 +31,19 @@ class MainTabBarController: UITabBarController
         {
             DispatchQueue.main.async {
                 let googleAuthViewController = GoogleAuthViewController()
+                googleAuthViewController.delegate = self
                 self.present(googleAuthViewController, animated: true, completion: nil)
             }
         }
+        else
+        {
+//            didAuthorize()
+        }
+    }
+    
+    func didAuthorize()
+    {
+//        libraryCollectionViewController?.fetchBooks()
     }
     
     private func setupViewControllers()
@@ -40,9 +51,9 @@ class MainTabBarController: UITabBarController
         let libraryLayout = UICollectionViewFlowLayout()
         libraryLayout.scrollDirection = .horizontal
         libraryLayout.minimumLineSpacing = 0
-        let libraryCollectionViewController = LibraryCollectionViewController(collectionViewLayout: libraryLayout)
-        libraryCollectionViewController.bookController = self.bookController
-        let libraryNavController = UINavigationController(rootViewController: libraryCollectionViewController)
+        libraryCollectionViewController = LibraryCollectionViewController(collectionViewLayout: libraryLayout)
+        libraryCollectionViewController?.bookController = self.bookController
+        let libraryNavController = UINavigationController(rootViewController: libraryCollectionViewController!)
         libraryNavController.navigationBar.isTranslucent = false
         libraryNavController.tabBarItem.title = "Library"
         libraryNavController.tabBarItem.image = UIImage(named: "literature")

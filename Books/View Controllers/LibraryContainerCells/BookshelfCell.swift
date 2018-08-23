@@ -7,10 +7,11 @@
 //
 
 import UIKit
+import CoreData
 
 protocol BookshelfCellDelegate: class
 {
-    func didSelectBook()
+    func didSelectBook(book: Book)
     func showErrorAlert(with text: String)
 }
 
@@ -19,12 +20,6 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
     let cellId = "bookCell"
     weak var delegate: BookshelfCellDelegate?
     var bookController: BookController?
-    {
-        didSet
-        {
-            fetchBooks()
-        }
-    }
     
     lazy var collectionView: UICollectionView =
     {
@@ -43,21 +38,13 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
         backgroundColor = .backgroundColor
         setupViews()
         collectionView.register(BookCell.self, forCellWithReuseIdentifier: cellId)
+        collectionView.alwaysBounceVertical = true
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadCollectionView), name: NSNotification.Name(rawValue: "reloadCollectionView"), object: nil)
     }
     
-    func fetchBooks()
+    @objc private func reloadCollectionView()
     {
-        bookController?.fetchBooksForBookshelf(bookshelfIndex: "0", completion: { (error) in
-            if error != nil
-            {
-                self.delegate?.showErrorAlert(with: "An error occured while loading your bookshelf, please check your connection and try again!")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        })
+        collectionView.reloadData()
     }
     
     private func setupViews()
@@ -68,29 +55,30 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return bookController?.readingNow.count ?? 0
+        return bookController?.favourites.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BookCell
         
-        let book = bookController?.readingNow[indexPath.item]
+        let book = bookController?.favourites[indexPath.item]
         
-        if let urlString = book?.volumeInfo?.imageLinks?.thumbnail
+        if let urlString = book?.thumbnailUrl
         {
-            cell.coverImageView.loadImageUsingCacheWithUrlString(urlString)
+            cell.coverImageView.loadImageUsingCacheOrUrlString(urlString)
         }
         
-        cell.authorLabel.text = book?.volumeInfo?.authors![0]
-        cell.titleLabel.text = book?.volumeInfo?.title
+        cell.authorLabel.text = book?.author
+        cell.titleLabel.text = book?.title
         
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {
-        delegate?.didSelectBook()
+        let book = bookController?.favourites[indexPath.item]
+        delegate?.didSelectBook(book: book!)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize

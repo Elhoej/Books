@@ -7,20 +7,134 @@
 //
 
 import Foundation
+import CoreData
 
 class BookController
 {
     let baseURL = URL(string: "https://www.googleapis.com/books/v1/")!
     
     private(set) var searchedBooks = [BookRepresentation]()
-    private(set) var favourites = [BookRepresentation]()
-    private(set) var readingNow = [BookRepresentation]()
-    private(set) var toRead = [BookRepresentation]()
-    private(set) var haveRead = [BookRepresentation]()
+    private(set) var favourites = [Book]() //0
+    private(set) var readingNow = [Book]() //3
+    private(set) var toRead = [Book]() //2
+    private(set) var haveRead = [Book]() //4
     
     init()
     {
+        let dispatchGroup = DispatchGroup()
         
+        dispatchGroup.enter()
+        fetchBooksForBookshelf(bookshelfIndex: "0") { (error) in
+            if error != nil
+            {
+                NSLog("Error fetching books for bookshelf: 0")
+                dispatchGroup.leave()
+                return
+            }
+            
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        fetchBooksForBookshelf(bookshelfIndex: "2") { (error) in
+            if error != nil
+            {
+                NSLog("Error fetching books for bookshelf: 2")
+                dispatchGroup.leave()
+                return
+            }
+            
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        fetchBooksForBookshelf(bookshelfIndex: "3") { (error) in
+            if error != nil
+            {
+                NSLog("Error fetching books for bookshelf: 3")
+                dispatchGroup.leave()
+                return
+            }
+            
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        fetchBooksForBookshelf(bookshelfIndex: "4") { (error) in
+            if error != nil
+            {
+                NSLog("Error fetching books for bookshelf: 4")
+                dispatchGroup.leave()
+                return
+            }
+            
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.fetchBooks()
+        }
+    }
+    
+    func updateReview(on book: Book, with review: String, bookshelf: String)
+    {
+        let backgroundMoc = CoreDataManager.shared.container.newBackgroundContext()
+        
+        backgroundMoc.performAndWait {
+            book.review = review
+            book.bookshelf = bookshelf
+        }
+        
+        do {
+            try CoreDataManager.shared.saveContext()
+            fetchBooks()
+        } catch {
+            NSLog("Error updating review on persistence: \(error)")
+            return
+        }
+    }
+    
+    func fetchBooks()
+    {
+        favourites.removeAll()
+        readingNow.removeAll()
+        toRead.removeAll()
+        haveRead.removeAll()
+        let fetchRequest = NSFetchRequest<Book>(entityName: "Book")
+        fetchRequest.returnsObjectsAsFaults = false
+        do {
+            
+            let books = try CoreDataManager.shared.mainContext.fetch(fetchRequest)
+            print(books.count)
+            
+            for book in books
+            {
+                if book.bookshelf == "0"
+                {
+                    self.favourites.append(book)
+                }
+                else if book.bookshelf == "2"
+                {
+                    self.toRead.append(book)
+                }
+                else if book.bookshelf == "3"
+                {
+                    self.readingNow.append(book)
+                }
+                else if book.bookshelf == "4"
+                {
+                    self.haveRead.append(book)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadCollectionView"), object: nil)
+            }
+            
+        } catch let fetchErr {
+            print("Failed to fetch books:", fetchErr)
+            return
+        }
     }
     
     func searchForBook(with searchTerm: String, completion: @escaping (Error?) -> ())
@@ -109,6 +223,7 @@ class BookController
                     return
                 }
                 
+                self.fetchBooks()
                 completion(nil)
                 
             }).resume()
@@ -157,29 +272,10 @@ class BookController
                 do {
                     let bookRepresentations = try JSONDecoder().decode(BookRepresentations.self, from: data).items
                     
-                    guard bookRepresentations != nil else {
-//                        let json = String(data:data, encoding: .utf8)
-//                        print(json ?? "")
-                        NSLog("Error unwrapping bookrepresentation")
-                        return }
-                    
-                    if bookshelfIndex == "0"
+                    if let bookReps = bookRepresentations
                     {
-                        print(bookshelfIndex)
-                        print(bookRepresentations?.count)
-                        self.favourites = bookRepresentations!
-                    }
-                    else if bookshelfIndex == "1"
-                    {
-                        self.readingNow = bookRepresentations!
-                    }
-                    else if bookshelfIndex == "2"
-                    {
-                        self.toRead = bookRepresentations!
-                    }
-                    else
-                    {
-                        self.haveRead = bookRepresentations!
+                        let backgroundMoc = CoreDataManager.shared.container.newBackgroundContext()
+                        try self.updateBooks(with: bookReps, bookshelfIndex: bookshelfIndex, context: backgroundMoc)
                     }
                     
                     completion(nil)
@@ -190,6 +286,45 @@ class BookController
                 }
                 
             }).resume()
+        }
+    }
+    
+    private func updateBooks(with representations: [BookRepresentation], bookshelfIndex: String, context: NSManagedObjectContext) throws
+    {
+        var error: Error?
+
+        context.performAndWait {
+
+            for bookRep in representations
+            {
+                let book = self.fetchSingleBookFromPersistence(identifier: bookRep.id!, context: context)
+
+                if book == nil
+                {
+                    let _ = Book(bookRepresentation: bookRep, bookshelf: bookshelfIndex, context: context)
+                }
+            }
+
+            do {
+                try CoreDataManager.shared.saveContext(context: context)
+            } catch let saveError {
+                error = saveError
+            }
+        }
+
+        if let error = error { throw error }
+    }
+    
+    func fetchSingleBookFromPersistence(identifier: String, context: NSManagedObjectContext) -> Book?
+    {
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", identifier)
+        do {
+            let moc = CoreDataManager.shared.mainContext
+            return try moc.fetch(fetchRequest).first
+        } catch {
+            NSLog("Error fetching book: \(error)")
+            return nil
         }
     }
 }

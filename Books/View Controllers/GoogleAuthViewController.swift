@@ -8,8 +8,15 @@
 
 import UIKit
 
+protocol GoogleAuthViewControllerDelegate: class
+{
+    func didAuthorize()
+}
+
 class GoogleAuthViewController: UIViewController
 {
+    weak var delegate: GoogleAuthViewControllerDelegate?
+    
     let backgroundImageView: UIImageView =
     {
         let iv = UIImageView(image: #imageLiteral(resourceName: "books-background"))
@@ -62,7 +69,9 @@ class GoogleAuthViewController: UIViewController
                 return
             }
             
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: {
+                self.delegate?.didAuthorize()
+            })
         }
     }
     

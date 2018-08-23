@@ -7,20 +7,10 @@
 //
 
 import UIKit
+import CoreData
 
-class LibraryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, BookshelfBarDelegate, BookshelfCellDelegate
+class LibraryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, BookshelfBarDelegate, BookshelfCellDelegate, NSFetchedResultsControllerDelegate
 {
-    func showErrorAlert(with text: String)
-    {
-        showAlert(with: text)
-    }
-    
-    func didSelectBook()
-    {
-        let bookDetailViewController = BookDetailViewController()
-        navigationController?.pushViewController(bookDetailViewController, animated: true)
-    }
-    
     var bookController: BookController?
     let readingNowId = "readingNowId"
     let toReadId = "toReadId"
@@ -34,16 +24,13 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         
         return bsb
     }()
-    
-    
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
         
         navigationItem.title = "Favourites"
-        
         setupCollectionView()
-        
         setupBookshelfBar()
     }
     
@@ -53,6 +40,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         collectionView?.isPagingEnabled = true
         collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
+        collectionView?.showsHorizontalScrollIndicator = false
         collectionView?.register(BookshelfCell.self, forCellWithReuseIdentifier: favouritesId)
         collectionView?.register(ToReadCell.self, forCellWithReuseIdentifier: toReadId)
         collectionView?.register(HaveReadCell.self, forCellWithReuseIdentifier: haveReadId)
@@ -78,6 +66,19 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         bookshelfBar.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: 0, height: 50)
     }
     
+    func showErrorAlert(with text: String)
+    {
+        showAlert(with: text)
+    }
+    
+    func didSelectBook(book: Book)
+    {
+        let bookDetailViewController = BookDetailViewController()
+        bookDetailViewController.book = book
+        bookDetailViewController.bookController = bookController
+        navigationController?.pushViewController(bookDetailViewController, animated: true)
+    }
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         return 4
@@ -91,7 +92,6 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         
         cell.delegate = self
         cell.bookController = self.bookController
-//        cell.fetchBooks()
         
         return cell
     }

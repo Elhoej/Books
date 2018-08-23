@@ -10,40 +10,31 @@ import UIKit
 
 class ReadingNowCell: BookshelfCell
 {
-    override func fetchBooks()
-    {
-        bookController?.fetchBooksForBookshelf(bookshelfIndex: "1", completion: { (error) in
-            if error != nil
-            {
-                self.delegate?.showErrorAlert(with: "An error occured while loading your bookshelf, please check your connection and try again!")
-                return
-            }
-            
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        })
-    }
-    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return bookController?.favourites.count ?? 0
+        return bookController?.readingNow.count ?? 0
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BookCell
         
-        let book = bookController?.favourites[indexPath.item]
+        let book = bookController?.readingNow[indexPath.item]
         
-        if let urlString = book?.volumeInfo?.imageLinks?.thumbnail
+        if let urlString = book?.thumbnailUrl
         {
-            cell.coverImageView.loadImageUsingCacheWithUrlString(urlString)
+            cell.coverImageView.loadImageUsingCacheOrUrlString(urlString)
         }
         
-        cell.authorLabel.text = book?.volumeInfo?.authors![0]
-        cell.titleLabel.text = book?.volumeInfo?.title
+        cell.authorLabel.text = book?.author
+        cell.titleLabel.text = book?.title
         
         return cell
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    {
+        let book = bookController?.readingNow[indexPath.item]
+        delegate?.didSelectBook(book: book!)
     }
 }

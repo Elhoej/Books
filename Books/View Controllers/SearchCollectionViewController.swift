@@ -74,9 +74,14 @@ class SearchCollectionViewController: UICollectionViewController, UICollectionVi
         
         if let urlString = book?.volumeInfo?.imageLinks?.thumbnail
         {
-            cell.coverImageView.loadImageUsingCacheWithUrlString(urlString)
+            cell.coverImageView.loadImageUsingCacheOrUrlString(urlString)
         }
-        cell.authorLabel.text = book?.volumeInfo?.authors![0]
+        
+        if let authors = book?.volumeInfo?.authors
+        {
+            cell.authorLabel.text = authors[0]
+        }
+        
         cell.titleLabel.text = book?.volumeInfo?.title
         
         return cell
@@ -87,7 +92,7 @@ class SearchCollectionViewController: UICollectionViewController, UICollectionVi
         let book = bookController?.searchedBooks[indexPath.item]
         let bookDetailViewController = BookDetailViewController()
         bookDetailViewController.bookController = self.bookController
-        bookDetailViewController.book = book
+        bookDetailViewController.bookRep = book
         navigationController?.pushViewController(bookDetailViewController, animated: true)
     }
     

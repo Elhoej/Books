@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC79377A212EC47A0047074E /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC793779212EC47A0047074E /* CoreDataManager.swift */; };
 		ACFC4176212C6A1D001AE418 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC4175212C6A1D001AE418 /* AppDelegate.swift */; };
 		ACFC4178212C6A1D001AE418 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC4177212C6A1D001AE418 /* MainTabBarController.swift */; };
 		ACFC417D212C6A20001AE418 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACFC417C212C6A20001AE418 /* Assets.xcassets */; };
@@ -58,6 +59,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AC793779212EC47A0047074E /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		ACFC4172212C6A1D001AE418 /* Books.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Books.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACFC4175212C6A1D001AE418 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ACFC4177212C6A1D001AE418 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -128,7 +130,7 @@
 			children = (
 				ACFC41A9212C9BE2001AE418 /* Model Controller */,
 				ACFC41A8212C9BDA001AE418 /* Model */,
-				ACFC419F212C748C001AE418 /* Google Auth Client */,
+				ACFC419F212C748C001AE418 /* Singletons */,
 				ACFC41E3212DBC9F001AE418 /* Views */,
 				ACFC419E212C746A001AE418 /* View Controllers */,
 				ACFC4177212C6A1D001AE418 /* MainTabBarController.swift */,
@@ -153,12 +155,13 @@
 			path = "View Controllers";
 			sourceTree = "<group>";
 		};
-		ACFC419F212C748C001AE418 /* Google Auth Client */ = {
+		ACFC419F212C748C001AE418 /* Singletons */ = {
 			isa = PBXGroup;
 			children = (
 				ACFC4187212C6D7C001AE418 /* GoogleBooksAuthorizationClient.swift */,
+				AC793779212EC47A0047074E /* CoreDataManager.swift */,
 			);
-			path = "Google Auth Client";
+			path = Singletons;
 			sourceTree = "<group>";
 		};
 		ACFC41A8212C9BDA001AE418 /* Model */ = {
@@ -311,6 +314,7 @@
 				ACFC41E5212DBCBA001AE418 /* BookshelfBarCell.swift in Sources */,
 				ACFC41B3212D713A001AE418 /* BookRepresentation.swift in Sources */,
 				ACFC41A1212C74AD001AE418 /* LibraryCollectionViewController.swift in Sources */,
+				AC79377A212EC47A0047074E /* CoreDataManager.swift in Sources */,
 				ACFC41EE212DED89001AE418 /* HaveReadCell.swift in Sources */,
 				ACFC4188212C6D7C001AE418 /* GoogleBooksAuthorizationClient.swift in Sources */,
 				ACFC41EB212DED3C001AE418 /* ToReadCell.swift in Sources */,
