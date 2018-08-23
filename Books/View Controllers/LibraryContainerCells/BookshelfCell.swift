@@ -11,6 +11,7 @@ import UIKit
 protocol BookshelfCellDelegate: class
 {
     func didSelectBook()
+    func showErrorAlert(with text: String)
 }
 
 class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
@@ -18,6 +19,12 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
     let cellId = "bookCell"
     weak var delegate: BookshelfCellDelegate?
     var bookController: BookController?
+    {
+        didSet
+        {
+            fetchBooks()
+        }
+    }
     
     lazy var collectionView: UICollectionView =
     {
@@ -30,14 +37,27 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
         return cv
     }()
     
-    
     override init(frame: CGRect)
     {
         super.init(frame: frame)
         backgroundColor = .backgroundColor
         setupViews()
-        
         collectionView.register(BookCell.self, forCellWithReuseIdentifier: cellId)
+    }
+    
+    func fetchBooks()
+    {
+        bookController?.fetchBooksForBookshelf(bookshelfIndex: "0", completion: { (error) in
+            if error != nil
+            {
+                self.delegate?.showErrorAlert(with: "An error occured while loading your bookshelf, please check your connection and try again!")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        })
     }
     
     private func setupViews()
@@ -48,16 +68,22 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
-        return 8
+        return bookController?.readingNow.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! BookCell
         
-        cell.coverImageView.image = #imageLiteral(resourceName: "testimage")
-        cell.authorLabel.text = "Simon elhoej steinmejer"
-        cell.titleLabel.text = "Hihahuhe vol. \(indexPath.item)"
+        let book = bookController?.readingNow[indexPath.item]
+        
+        if let urlString = book?.volumeInfo?.imageLinks?.thumbnail
+        {
+            cell.coverImageView.loadImageUsingCacheWithUrlString(urlString)
+        }
+        
+        cell.authorLabel.text = book?.volumeInfo?.authors![0]
+        cell.titleLabel.text = book?.volumeInfo?.title
         
         return cell
     }

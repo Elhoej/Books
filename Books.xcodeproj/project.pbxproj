@@ -36,8 +36,9 @@
 		ACFC41E9212DC6DD001AE418 /* BookshelfCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41E8212DC6DD001AE418 /* BookshelfCell.swift */; };
 		ACFC41EB212DED3C001AE418 /* ToReadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41EA212DED3C001AE418 /* ToReadCell.swift */; };
 		ACFC41EE212DED89001AE418 /* HaveReadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41ED212DED89001AE418 /* HaveReadCell.swift */; };
-		ACFC41F0212DEDA1001AE418 /* FavouritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41EF212DEDA1001AE418 /* FavouritesCell.swift */; };
+		ACFC41F0212DEDA1001AE418 /* ReadingNowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41EF212DEDA1001AE418 /* ReadingNowCell.swift */; };
 		ACFC41F2212DF696001AE418 /* BookController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41F1212DF696001AE418 /* BookController.swift */; };
+		ACFC41F4212E2B46001AE418 /* BookshelfRepresentation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFC41F3212E2B46001AE418 /* BookshelfRepresentation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -82,8 +83,9 @@
 		ACFC41E8212DC6DD001AE418 /* BookshelfCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfCell.swift; sourceTree = "<group>"; };
 		ACFC41EA212DED3C001AE418 /* ToReadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToReadCell.swift; sourceTree = "<group>"; };
 		ACFC41ED212DED89001AE418 /* HaveReadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HaveReadCell.swift; sourceTree = "<group>"; };
-		ACFC41EF212DEDA1001AE418 /* FavouritesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesCell.swift; sourceTree = "<group>"; };
+		ACFC41EF212DEDA1001AE418 /* ReadingNowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingNowCell.swift; sourceTree = "<group>"; };
 		ACFC41F1212DF696001AE418 /* BookController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookController.swift; sourceTree = "<group>"; };
+		ACFC41F3212E2B46001AE418 /* BookshelfRepresentation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookshelfRepresentation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				ACFC41AD212CA871001AE418 /* Book.xcdatamodeld */,
 				ACFC41B0212D70F4001AE418 /* Book+Convenience.swift */,
 				ACFC41B2212D713A001AE418 /* BookRepresentation.swift */,
+				ACFC41F3212E2B46001AE418 /* BookshelfRepresentation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -219,7 +222,7 @@
 				ACFC41E8212DC6DD001AE418 /* BookshelfCell.swift */,
 				ACFC41EA212DED3C001AE418 /* ToReadCell.swift */,
 				ACFC41ED212DED89001AE418 /* HaveReadCell.swift */,
-				ACFC41EF212DEDA1001AE418 /* FavouritesCell.swift */,
+				ACFC41EF212DEDA1001AE418 /* ReadingNowCell.swift */,
 			);
 			path = LibraryContainerCells;
 			sourceTree = "<group>";
@@ -299,7 +302,8 @@
 				ACFC41A5212C789B001AE418 /* GoogleAuthViewController.swift in Sources */,
 				ACFC41B1212D70F4001AE418 /* Book+Convenience.swift in Sources */,
 				ACFC41E9212DC6DD001AE418 /* BookshelfCell.swift in Sources */,
-				ACFC41F0212DEDA1001AE418 /* FavouritesCell.swift in Sources */,
+				ACFC41F4212E2B46001AE418 /* BookshelfRepresentation.swift in Sources */,
+				ACFC41F0212DEDA1001AE418 /* ReadingNowCell.swift in Sources */,
 				ACFC41F2212DF696001AE418 /* BookController.swift in Sources */,
 				ACFC41B5212D7CB7001AE418 /* BookCell.swift in Sources */,
 				ACFC41A3212C74F3001AE418 /* SearchCollectionViewController.swift in Sources */,

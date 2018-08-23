@@ -16,7 +16,7 @@ protocol BookshelfBarDelegate: class
 class BookshelfBar: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource
 {
     let cellId = "bookshelfBarCell"
-    let bookshelfNames = ["Reading now", "To read", "Have read", "Favourites"]
+    let bookshelfNames = ["Favourites", "Reading now", "To read", "Have read"]
     weak var delegate: BookshelfBarDelegate?
     
     lazy var collectionView: UICollectionView =

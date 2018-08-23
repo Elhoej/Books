@@ -57,7 +57,7 @@ class BookController
             
             do {
                 let bookRepresentations = try JSONDecoder().decode(BookRepresentations.self, from: data).items
-                self.searchedBooks = bookRepresentations
+                self.searchedBooks = bookRepresentations!
                 completion(nil)
             } catch {
                 NSLog("Error decoding data: \(error)")
@@ -110,6 +110,84 @@ class BookController
                 }
                 
                 completion(nil)
+                
+            }).resume()
+        }
+    }
+    
+    func fetchBooksForBookshelf(bookshelfIndex: String, completion: @escaping (Error?) -> ())
+    {
+        print(bookshelfIndex)
+        
+        let url = baseURL.appendingPathComponent("mylibrary").appendingPathComponent("bookshelves").appendingPathComponent(bookshelfIndex).appendingPathComponent("volumes")
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        GoogleBooksAuthorizationClient.shared.addAuthorization(to: request) { (authRequest, error) in
+            
+            guard let authRequest = authRequest else {
+                NSLog("Authrequest is nil")
+                completion(NSError())
+                return
+            }
+            
+            if let error = error
+            {
+                NSLog("An error occured while getting auth url: \(error)")
+                completion(error)
+                return
+            }
+            
+            URLSession.shared.dataTask(with: authRequest, completionHandler: { (data, _, error) in
+                
+                if let error = error
+                {
+                    NSLog("Error fetching book for bookshelf: \(error)")
+                    completion(error)
+                    return
+                }
+                
+                guard let data = data else {
+                    NSLog("Error unwrapping data")
+                    completion(NSError())
+                    return
+                }
+                
+                do {
+                    let bookRepresentations = try JSONDecoder().decode(BookRepresentations.self, from: data).items
+                    
+                    guard bookRepresentations != nil else {
+//                        let json = String(data:data, encoding: .utf8)
+//                        print(json ?? "")
+                        NSLog("Error unwrapping bookrepresentation")
+                        return }
+                    
+                    if bookshelfIndex == "0"
+                    {
+                        print(bookshelfIndex)
+                        print(bookRepresentations?.count)
+                        self.favourites = bookRepresentations!
+                    }
+                    else if bookshelfIndex == "1"
+                    {
+                        self.readingNow = bookRepresentations!
+                    }
+                    else if bookshelfIndex == "2"
+                    {
+                        self.toRead = bookRepresentations!
+                    }
+                    else
+                    {
+                        self.haveRead = bookRepresentations!
+                    }
+                    
+                    completion(nil)
+                } catch {
+                    NSLog("Error decoding data: \(error)")
+                    completion(error)
+                    return
+                }
                 
             }).resume()
         }

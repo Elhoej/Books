@@ -85,7 +85,7 @@ struct BookRepresentation: Codable
 
 struct BookRepresentations: Codable
 {
-    let items: [BookRepresentation]
+    let items: [BookRepresentation]?
 }
 
 //func !=(lhs: Book, rhs: BookRepresentation) -> Bool

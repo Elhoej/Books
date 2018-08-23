@@ -10,6 +10,11 @@ import UIKit
 
 class LibraryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, BookshelfBarDelegate, BookshelfCellDelegate
 {
+    func showErrorAlert(with text: String)
+    {
+        showAlert(with: text)
+    }
+    
     func didSelectBook()
     {
         let bookDetailViewController = BookDetailViewController()
@@ -48,10 +53,10 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         collectionView?.isPagingEnabled = true
         collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
-        collectionView?.register(BookshelfCell.self, forCellWithReuseIdentifier: readingNowId)
+        collectionView?.register(BookshelfCell.self, forCellWithReuseIdentifier: favouritesId)
         collectionView?.register(ToReadCell.self, forCellWithReuseIdentifier: toReadId)
         collectionView?.register(HaveReadCell.self, forCellWithReuseIdentifier: haveReadId)
-        collectionView?.register(FavouritesCell.self, forCellWithReuseIdentifier: favouritesId)
+        collectionView?.register(ReadingNowCell.self, forCellWithReuseIdentifier: readingNowId)
     }
     
     func selectedBookshelfDidChange(to index: Int)
@@ -86,6 +91,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         
         cell.delegate = self
         cell.bookController = self.bookController
+//        cell.fetchBooks()
         
         return cell
     }
