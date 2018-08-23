@@ -10,6 +10,8 @@ import UIKit
 
 class BookshelfBarCell: UICollectionViewCell
 {
+    //MARK: - UI Objects
+    
     let bookshelfNameLabel: UILabel =
     {
         let label = UILabel()
@@ -19,6 +21,8 @@ class BookshelfBarCell: UICollectionViewCell
         
         return label
     }()
+    
+    //MARK: - Properties
     
     override var isHighlighted: Bool
     {
@@ -42,6 +46,8 @@ class BookshelfBarCell: UICollectionViewCell
         
         setupViews()
     }
+    
+    //MARK: - AutoLayout
     
     private func setupViews()
     {

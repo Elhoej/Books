@@ -15,8 +15,10 @@ protocol BookshelfCellDelegate: class
     func showErrorAlert(with text: String)
 }
 
-class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
+class FavouritesCell: UICollectionViewCell, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout
 {
+    //MARK: - Properties
+    
     let cellId = "bookCell"
     weak var delegate: BookshelfCellDelegate?
     var bookController: BookController?
@@ -31,6 +33,8 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
         
         return cv
     }()
+    
+    //MARK: - Functions
     
     override init(frame: CGRect)
     {
@@ -52,6 +56,8 @@ class BookshelfCell: UICollectionViewCell, UICollectionViewDataSource, UICollect
         addSubview(collectionView)
         collectionView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: 0, height: 0)
     }
+    
+    //MARK: - CollectionView Delegate & DataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {

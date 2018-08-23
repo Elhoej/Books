@@ -15,6 +15,8 @@ protocol BookshelfBarDelegate: class
 
 class BookshelfBar: UIView, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource
 {
+    //MARK: - Properties
+    
     let cellId = "bookshelfBarCell"
     let bookshelfNames = ["Favourites", "Reading now", "To read", "Have read"]
     weak var delegate: BookshelfBarDelegate?
@@ -30,6 +32,7 @@ class BookshelfBar: UIView, UICollectionViewDelegate, UICollectionViewDelegateFl
         return cv
     }()
     
+    //MARK: - Functions
     
     override init(frame: CGRect)
     {
@@ -65,6 +68,8 @@ class BookshelfBar: UIView, UICollectionViewDelegate, UICollectionViewDelegateFl
         let selectedIndexPath = IndexPath(item: 0, section: 0)
         collectionView.selectItem(at: selectedIndexPath, animated: false, scrollPosition: .left)
     }
+    
+    //MARK: - CollectionView Delegate & DataSource
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
     {

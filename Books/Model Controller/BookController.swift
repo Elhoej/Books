@@ -11,6 +11,7 @@ import CoreData
 
 class BookController
 {
+    //MARK: - Properties
     let baseURL = URL(string: "https://www.googleapis.com/books/v1/")!
     
     private(set) var searchedBooks = [BookRepresentation]()
@@ -21,10 +22,17 @@ class BookController
     
     init()
     {
+        fetchAllBookshelves()
+    }
+    
+    //MARK: - API Functions
+    
+    func fetchAllBookshelves()
+    {
         let dispatchGroup = DispatchGroup()
         
         dispatchGroup.enter()
-        fetchBooksForBookshelf(bookshelfIndex: "0") { (error) in
+        fetchBooksForBookshelf(bookshelfIndex: Bookshelf.favourites.rawValue) { (error) in
             if error != nil
             {
                 NSLog("Error fetching books for bookshelf: 0")
@@ -36,7 +44,7 @@ class BookController
         }
         
         dispatchGroup.enter()
-        fetchBooksForBookshelf(bookshelfIndex: "2") { (error) in
+        fetchBooksForBookshelf(bookshelfIndex: Bookshelf.toRead.rawValue) { (error) in
             if error != nil
             {
                 NSLog("Error fetching books for bookshelf: 2")
@@ -48,7 +56,7 @@ class BookController
         }
         
         dispatchGroup.enter()
-        fetchBooksForBookshelf(bookshelfIndex: "3") { (error) in
+        fetchBooksForBookshelf(bookshelfIndex: Bookshelf.readingNow.rawValue) { (error) in
             if error != nil
             {
                 NSLog("Error fetching books for bookshelf: 3")
@@ -60,7 +68,7 @@ class BookController
         }
         
         dispatchGroup.enter()
-        fetchBooksForBookshelf(bookshelfIndex: "4") { (error) in
+        fetchBooksForBookshelf(bookshelfIndex: Bookshelf.haveRead.rawValue) { (error) in
             if error != nil
             {
                 NSLog("Error fetching books for bookshelf: 4")
@@ -73,160 +81,6 @@ class BookController
         
         dispatchGroup.notify(queue: .main) {
             self.fetchBooks()
-        }
-    }
-    
-    func updateReview(on book: Book, with review: String, bookshelf: String)
-    {
-        let backgroundMoc = CoreDataManager.shared.container.newBackgroundContext()
-        
-        backgroundMoc.performAndWait {
-            book.review = review
-            book.bookshelf = bookshelf
-        }
-        
-        do {
-            try CoreDataManager.shared.saveContext()
-            fetchBooks()
-        } catch {
-            NSLog("Error updating review on persistence: \(error)")
-            return
-        }
-    }
-    
-    func fetchBooks()
-    {
-        favourites.removeAll()
-        readingNow.removeAll()
-        toRead.removeAll()
-        haveRead.removeAll()
-        let fetchRequest = NSFetchRequest<Book>(entityName: "Book")
-        fetchRequest.returnsObjectsAsFaults = false
-        do {
-            
-            let books = try CoreDataManager.shared.mainContext.fetch(fetchRequest)
-            print(books.count)
-            
-            for book in books
-            {
-                if book.bookshelf == "0"
-                {
-                    self.favourites.append(book)
-                }
-                else if book.bookshelf == "2"
-                {
-                    self.toRead.append(book)
-                }
-                else if book.bookshelf == "3"
-                {
-                    self.readingNow.append(book)
-                }
-                else if book.bookshelf == "4"
-                {
-                    self.haveRead.append(book)
-                }
-            }
-            
-            DispatchQueue.main.async {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadCollectionView"), object: nil)
-            }
-            
-        } catch let fetchErr {
-            print("Failed to fetch books:", fetchErr)
-            return
-        }
-    }
-    
-    func searchForBook(with searchTerm: String, completion: @escaping (Error?) -> ())
-    {
-        let url = baseURL.appendingPathComponent("volumes")
-        
-        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)!
-        let searchQueryItem = URLQueryItem(name: "q", value: searchTerm)
-        urlComponents.queryItems = [searchQueryItem]
-        
-        guard let urlRequest = urlComponents.url else {
-            NSLog("Failed to create URLRequest")
-            completion(NSError())
-            return
-        }
-        
-        var request = URLRequest(url: urlRequest)
-        request.httpMethod = "GET"
-        
-        URLSession.shared.dataTask(with: request) { (data, _, error) in
-            
-            if let error = error
-            {
-                NSLog("Failed to search for books: \(error)")
-                completion(error)
-                return
-            }
-            
-            guard let data = data else {
-                NSLog("Error unwrapping data")
-                completion(NSError())
-                return
-            }
-            
-            do {
-                let bookRepresentations = try JSONDecoder().decode(BookRepresentations.self, from: data).items
-                self.searchedBooks = bookRepresentations!
-                completion(nil)
-            } catch {
-                NSLog("Error decoding data: \(error)")
-                completion(error)
-                return
-            }
-            
-        }.resume()
-    }
-    
-    func addBookToBookshelf(with bookId: String, on bookshelf: String, completion: @escaping (Error?) -> ())
-    {
-        let url = baseURL.appendingPathComponent("mylibrary").appendingPathComponent("bookshelves").appendingPathComponent(bookshelf).appendingPathComponent("addVolume")
-        
-        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)!
-        let addBookQueryItem = URLQueryItem(name: "volumeId", value: bookId)
-        urlComponents.queryItems = [addBookQueryItem]
-        
-        guard let urlRequest = urlComponents.url else {
-            NSLog("Failed to create url request")
-            completion(NSError())
-            return
-        }
-        
-        var request = URLRequest(url: urlRequest)
-        request.httpMethod = "POST"
-        
-        GoogleBooksAuthorizationClient.shared.addAuthorization(to: request) { (authRequest, error) in
-            
-            if let error = error
-            {
-                NSLog("Failed to add auth to request: \(error)")
-                completion(error)
-                return
-            }
-            
-            guard let authRequest = authRequest else{
-                NSLog("Authrequest was nil")
-                completion(NSError())
-                return
-            }
-            
-            URLSession.shared.dataTask(with: authRequest, completionHandler: { (data, _, error) in
-                
-                if let error = error
-                {
-                    NSLog("Datatask to add book failed: \(error)")
-                    completion(error)
-                    return
-                }
-                
-                self.fetchBooks()
-                completion(nil)
-                
-            }).resume()
         }
     }
     
@@ -289,6 +143,235 @@ class BookController
         }
     }
     
+    func addBookToBookshelf(with bookId: String, on bookshelf: String, completion: @escaping (Error?) -> ())
+    {
+        let url = baseURL.appendingPathComponent("mylibrary").appendingPathComponent("bookshelves").appendingPathComponent(bookshelf).appendingPathComponent("addVolume")
+        
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+        let addBookQueryItem = URLQueryItem(name: "volumeId", value: bookId)
+        urlComponents.queryItems = [addBookQueryItem]
+        
+        guard let urlRequest = urlComponents.url else {
+            NSLog("Failed to create url request")
+            completion(NSError())
+            return
+        }
+        
+        var request = URLRequest(url: urlRequest)
+        request.httpMethod = "POST"
+        
+        GoogleBooksAuthorizationClient.shared.addAuthorization(to: request) { (authRequest, error) in
+            
+            if let error = error
+            {
+                NSLog("Failed to add auth to request: \(error)")
+                completion(error)
+                return
+            }
+            
+            guard let authRequest = authRequest else{
+                NSLog("Authrequest was nil")
+                completion(NSError())
+                return
+            }
+            
+            URLSession.shared.dataTask(with: authRequest, completionHandler: { (data, _, error) in
+                
+                if let error = error
+                {
+                    NSLog("Datatask to add book failed: \(error)")
+                    completion(error)
+                    return
+                }
+                
+                self.fetchBooks()
+                completion(nil)
+                
+            }).resume()
+        }
+    }
+    
+    func delete(book: Book, from bookshelf: String, completion: @escaping (Error?) -> ())
+    {
+        let url = baseURL.appendingPathComponent("mylibrary").appendingPathComponent("bookshelves").appendingPathComponent(bookshelf).appendingPathComponent("removeVolume")
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+        let deleteQueryItem = URLQueryItem(name: "volumeId", value: book.id)
+        urlComponents.queryItems = [deleteQueryItem]
+        
+        guard let urlWithQuery = urlComponents.url else {
+            NSLog("Error getting url from urlComponents")
+            completion(NSError())
+            return
+        }
+        
+        var urlRequest = URLRequest(url: urlWithQuery)
+        urlRequest.httpMethod = "POST"
+        
+        GoogleBooksAuthorizationClient.shared.addAuthorization(to: urlRequest) { (authRequest, error) in
+            
+            if let error = error
+            {
+                NSLog("Error getting authorization: \(error)")
+                completion(error)
+            }
+            
+            guard let request = authRequest else {
+                NSLog("Error getting request from authRequest")
+                completion(NSError())
+                return
+            }
+            
+            URLSession.shared.dataTask(with: request, completionHandler: { (data, _, error) in
+                
+                if let error = error
+                {
+                    NSLog("Error during datatask to delete book: \(error)")
+                    completion(error)
+                    return
+                }
+        
+                completion(nil)
+            }).resume()
+        }
+    }
+    
+    func update(on book: Book, with review: String, bookshelf: String)
+    {
+        let backgroundMoc = CoreDataManager.shared.container.newBackgroundContext()
+        
+        delete(book: book, from: book.bookshelf!) { (error) in
+            if error != nil
+            {
+                print("error moving book to from bookshelf")
+                return
+            }
+        }
+        
+        addBookToBookshelf(with: book.id!, on: bookshelf) { (error) in
+            if error != nil
+            {
+                print("error moving book to bookshelf")
+                return
+            }
+        }
+        
+        backgroundMoc.performAndWait {
+            book.review = review
+            book.bookshelf = bookshelf
+        }
+        
+        do {
+            try CoreDataManager.shared.saveContext()
+            fetchBooks()
+        } catch {
+            NSLog("Error updating review on persistence: \(error)")
+            return
+        }
+    }
+    
+    func searchForBook(with searchTerm: String, completion: @escaping (Error?) -> ())
+    {
+        let url = baseURL.appendingPathComponent("volumes")
+        
+        var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)!
+        let searchQueryItem = URLQueryItem(name: "q", value: searchTerm)
+        urlComponents.queryItems = [searchQueryItem]
+        
+        guard let urlRequest = urlComponents.url else {
+            NSLog("Failed to create URLRequest")
+            completion(NSError())
+            return
+        }
+        
+        var request = URLRequest(url: urlRequest)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) { (data, _, error) in
+            
+            if let error = error
+            {
+                NSLog("Failed to search for books: \(error)")
+                completion(error)
+                return
+            }
+            
+            guard let data = data else {
+                NSLog("Error unwrapping data")
+                completion(NSError())
+                return
+            }
+            
+            do {
+                let bookRepresentations = try JSONDecoder().decode(BookRepresentations.self, from: data).items
+                self.searchedBooks = bookRepresentations!
+                completion(nil)
+            } catch {
+                NSLog("Error decoding data: \(error)")
+                completion(error)
+                return
+            }
+            
+        }.resume()
+    }
+    
+    //MARK: - CoreData Functions
+    
+    func fetchBooks()
+    {
+        favourites.removeAll()
+        readingNow.removeAll()
+        toRead.removeAll()
+        haveRead.removeAll()
+        let fetchRequest = NSFetchRequest<Book>(entityName: "Book")
+        fetchRequest.returnsObjectsAsFaults = false
+        do {
+            
+            let books = try CoreDataManager.shared.mainContext.fetch(fetchRequest)
+            print(books.count)
+            
+            for book in books
+            {
+                if book.bookshelf == Bookshelf.favourites.rawValue
+                {
+                    self.favourites.append(book)
+                }
+                else if book.bookshelf == Bookshelf.toRead.rawValue
+                {
+                    self.toRead.append(book)
+                }
+                else if book.bookshelf == Bookshelf.readingNow.rawValue
+                {
+                    self.readingNow.append(book)
+                }
+                else if book.bookshelf == Bookshelf.haveRead.rawValue
+                {
+                    self.haveRead.append(book)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadCollectionView"), object: nil)
+            }
+            
+        } catch let fetchErr {
+            print("Failed to fetch books:", fetchErr)
+            return
+        }
+    }
+    
+    func fetchSingleBookFromPersistence(identifier: String, context: NSManagedObjectContext) -> Book?
+    {
+        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", identifier)
+        do {
+            let moc = CoreDataManager.shared.mainContext
+            return try moc.fetch(fetchRequest).first
+        } catch {
+            NSLog("Error fetching book: \(error)")
+            return nil
+        }
+    }
+    
     private func updateBooks(with representations: [BookRepresentation], bookshelfIndex: String, context: NSManagedObjectContext) throws
     {
         var error: Error?
@@ -315,16 +398,16 @@ class BookController
         if let error = error { throw error }
     }
     
-    func fetchSingleBookFromPersistence(identifier: String, context: NSManagedObjectContext) -> Book?
+    func deleteFromCoreData(book: Book)
     {
-        let fetchRequest: NSFetchRequest<Book> = Book.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "id == %@", identifier)
+        CoreDataManager.shared.mainContext.delete(book)
         do {
-            let moc = CoreDataManager.shared.mainContext
-            return try moc.fetch(fetchRequest).first
+            try CoreDataManager.shared.saveContext()
+            self.fetchBooks()
+            
         } catch {
-            NSLog("Error fetching book: \(error)")
-            return nil
+            NSLog("Error saving update: \(error)")
+            return
         }
     }
 }

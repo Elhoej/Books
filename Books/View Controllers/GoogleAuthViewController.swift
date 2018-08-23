@@ -8,14 +8,9 @@
 
 import UIKit
 
-protocol GoogleAuthViewControllerDelegate: class
-{
-    func didAuthorize()
-}
-
 class GoogleAuthViewController: UIViewController
 {
-    weak var delegate: GoogleAuthViewControllerDelegate?
+    //MARK: - UI Objects
     
     let backgroundImageView: UIImageView =
     {
@@ -50,6 +45,8 @@ class GoogleAuthViewController: UIViewController
         return button
     }()
     
+    //MARK: - Functions
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -69,24 +66,8 @@ class GoogleAuthViewController: UIViewController
                 return
             }
             
-            self.dismiss(animated: true, completion: {
-                self.delegate?.didAuthorize()
-            })
+            self.dismiss(animated: true, completion: nil)
         }
-    }
-    
-    private func setupUI()
-    {
-        view.addSubview(backgroundImageView)
-        view.addSubview(titleLabel)
-        view.addSubview(authButton)
-        
-        backgroundImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: -50, paddingLeft: -50, paddingRight: -50, paddingBottom: 50, width: 0, height: 0)
-        
-        titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        authButton.anchor(top: titleLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: view.safeAreaLayoutGuide.rightAnchor, paddingTop: 50, paddingLeft: 25, paddingRight: 25, paddingBottom: 0, width: 0, height: 50)
     }
     
     private func applyMotionEffect(view: UIView, magnitude: CGFloat)
@@ -103,6 +84,22 @@ class GoogleAuthViewController: UIViewController
         group.motionEffects = [xMotion, yMotion]
         
         view.addMotionEffect(group)
+    }
+    
+    //MARK: - AutoLayout
+    
+    private func setupUI()
+    {
+        view.addSubview(backgroundImageView)
+        view.addSubview(titleLabel)
+        view.addSubview(authButton)
+        
+        backgroundImageView.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingTop: -50, paddingLeft: -50, paddingRight: -50, paddingBottom: 50, width: 0, height: 0)
+        
+        titleLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -50).isActive = true
+        titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        authButton.anchor(top: titleLabel.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, bottom: nil, right: view.safeAreaLayoutGuide.rightAnchor, paddingTop: 50, paddingLeft: 25, paddingRight: 25, paddingBottom: 0, width: 0, height: 50)
     }
 }
 

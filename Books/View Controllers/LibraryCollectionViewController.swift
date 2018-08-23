@@ -11,6 +11,8 @@ import CoreData
 
 class LibraryCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, BookshelfBarDelegate, BookshelfCellDelegate, NSFetchedResultsControllerDelegate
 {
+    //MARK: - Properties
+    
     var bookController: BookController?
     let readingNowId = "readingNowId"
     let toReadId = "toReadId"
@@ -34,6 +36,8 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         setupBookshelfBar()
     }
     
+    //MARK: - Functions
+    
     private func setupCollectionView()
     {
         collectionView?.backgroundColor = .backgroundColor
@@ -41,7 +45,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         collectionView?.contentInset = UIEdgeInsetsMake(50, 0, 0, 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsetsMake(50, 0, 0, 0)
         collectionView?.showsHorizontalScrollIndicator = false
-        collectionView?.register(BookshelfCell.self, forCellWithReuseIdentifier: favouritesId)
+        collectionView?.register(FavouritesCell.self, forCellWithReuseIdentifier: favouritesId)
         collectionView?.register(ToReadCell.self, forCellWithReuseIdentifier: toReadId)
         collectionView?.register(HaveReadCell.self, forCellWithReuseIdentifier: haveReadId)
         collectionView?.register(ReadingNowCell.self, forCellWithReuseIdentifier: readingNowId)
@@ -79,6 +83,8 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         navigationController?.pushViewController(bookDetailViewController, animated: true)
     }
     
+    //MARK: - CollectionView Delegate & DataSource
+    
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
         return 4
@@ -88,7 +94,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     {
         let identifier = cellId(for: indexPath.item)
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! BookshelfCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! FavouritesCell
         
         cell.delegate = self
         cell.bookController = self.bookController
@@ -96,6 +102,7 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
         return cell
     }
     
+    //helper function
     private func cellId(for index: Int) -> String
     {
         if index == 1
@@ -120,6 +127,8 @@ class LibraryCollectionViewController: UICollectionViewController, UICollectionV
     {
         return CGSize(width: self.view.frame.width, height: self.view.frame.height - 50)
     }
+    
+    //MARK: - ScrollView Delegate
     
     override func scrollViewDidScroll(_ scrollView: UIScrollView)
     {

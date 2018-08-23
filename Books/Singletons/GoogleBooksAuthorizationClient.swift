@@ -26,7 +26,7 @@ final class GoogleBooksAuthorizationClient {
     
     func isAuthorized() -> Bool
     {
-        return authorization == nil ? false : true
+        return authorization?.authState.isAuthorized ?? false
     }
     
     func authorizeIfNeeded(presenter: UIViewController, completion: @escaping (Error?) -> Void) {

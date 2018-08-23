@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController, GoogleAuthViewControllerDelegate
+class MainTabBarController: UITabBarController
 {
     let bookController = BookController()
     var libraryCollectionViewController: LibraryCollectionViewController?
@@ -16,6 +16,8 @@ class MainTabBarController: UITabBarController, GoogleAuthViewControllerDelegate
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        GoogleBooksAuthorizationClient.shared.resetAuthorization()
         
         tabBar.isTranslucent = false
         tabBar.tintColor = .backgroundColor
@@ -31,20 +33,12 @@ class MainTabBarController: UITabBarController, GoogleAuthViewControllerDelegate
         {
             DispatchQueue.main.async {
                 let googleAuthViewController = GoogleAuthViewController()
-                googleAuthViewController.delegate = self
                 self.present(googleAuthViewController, animated: true, completion: nil)
             }
         }
-        else
-        {
-//            didAuthorize()
-        }
     }
     
-    func didAuthorize()
-    {
-//        libraryCollectionViewController?.fetchBooks()
-    }
+    //MARK: - Setup ViewController for TabBar
     
     private func setupViewControllers()
     {
@@ -55,6 +49,8 @@ class MainTabBarController: UITabBarController, GoogleAuthViewControllerDelegate
         libraryCollectionViewController?.bookController = self.bookController
         let libraryNavController = UINavigationController(rootViewController: libraryCollectionViewController!)
         libraryNavController.navigationBar.isTranslucent = false
+        let textAttributes = [NSAttributedStringKey.foregroundColor: UIColor.backgroundColor]
+        libraryNavController.navigationBar.titleTextAttributes = textAttributes
         libraryNavController.tabBarItem.title = "Library"
         libraryNavController.tabBarItem.image = UIImage(named: "literature")
         
@@ -63,9 +59,9 @@ class MainTabBarController: UITabBarController, GoogleAuthViewControllerDelegate
         searchCollectionViewController.bookController = self.bookController
         let searchNavController = UINavigationController(rootViewController: searchCollectionViewController)
         searchNavController.navigationBar.isTranslucent = false
+        searchNavController.navigationBar.titleTextAttributes = textAttributes
         searchNavController.tabBarItem.title = "Search"
         searchNavController.tabBarItem.image = UIImage(named: "search")
-        
         
         viewControllers = [libraryNavController, searchNavController]
     }

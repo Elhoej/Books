@@ -10,6 +10,8 @@ import UIKit
 
 class BookCell: UICollectionViewCell
 {
+    //MARK: - UI Objects
+    
     let coverImageView: UIImageView =
     {
         let iv = UIImageView()
@@ -40,13 +42,14 @@ class BookCell: UICollectionViewCell
         return label
     }()
     
-    
     override init(frame: CGRect)
     {
         super.init(frame: frame)
         
         setupUI()
     }
+    
+    //MARK: - Auto Layout
     
     private func setupUI()
     {

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HaveReadCell: BookshelfCell
+class HaveReadCell: FavouritesCell
 {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {

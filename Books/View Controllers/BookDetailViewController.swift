@@ -10,6 +10,8 @@ import UIKit
 
 class BookDetailViewController: UIViewController
 {
+    //MARK: - Properties
+    
     var bookController: BookController?
     var bookRep: BookRepresentation?
     {
@@ -26,6 +28,8 @@ class BookDetailViewController: UIViewController
         }
     }
     
+    //MARK: - UI Objects
+    
     let scrollView: UIScrollView =
     {
         let sv = UIScrollView()
@@ -37,7 +41,7 @@ class BookDetailViewController: UIViewController
     
     let coverImageView: UIImageView =
     {
-        let iv = UIImageView(image: #imageLiteral(resourceName: "testimage"))
+        let iv = UIImageView()
         iv.contentMode = .scaleAspectFit
         iv.clipsToBounds = true
         
@@ -58,8 +62,8 @@ class BookDetailViewController: UIViewController
     let authorLabel: UILabel =
     {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .darkGray
+        label.font = UIFont.systemFont(ofSize: 18)
+        label.textColor = .black
         label.sizeToFit()
         label.numberOfLines = 0
         
@@ -71,7 +75,7 @@ class BookDetailViewController: UIViewController
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .right
-        label.textColor = .darkGray
+        label.textColor = .black
         label.sizeToFit()
         label.numberOfLines = 0
         
@@ -81,9 +85,9 @@ class BookDetailViewController: UIViewController
     let dateLabel: UILabel =
     {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
-        label.textColor = .darkGray
-        label.textAlignment = .center
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = .black
+        label.textAlignment = .right
         label.sizeToFit()
         
         return label
@@ -138,6 +142,8 @@ class BookDetailViewController: UIViewController
         return label
     }()
     
+    //MARK: - Functions
+    
     override func viewDidDisappear(_ animated: Bool)
     {
         super.viewDidDisappear(animated)
@@ -148,21 +154,39 @@ class BookDetailViewController: UIViewController
     {
         super.viewDidLoad()
         view.backgroundColor = .backgroundColor
-        hideKeyboardWhenTappedAround()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(handleSave))
         
+        hideKeyboardWhenTappedAround()
+        setupNavBar()
         setupViews()
         setupKeyboardObservers()
     }
     
-    func setupKeyboardObservers()
+    private func setupNavBar()
+    {
+        let saveBarButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(handleSave))
+        let deleteBarButton = UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
+        navigationItem.rightBarButtonItems = [saveBarButton, deleteBarButton]
+        
+        if book == nil
+        {
+            navigationItem.rightBarButtonItems![1].isEnabled = false
+            navigationItem.rightBarButtonItems![1].tintColor = .clear
+        }
+        else
+        {
+            navigationItem.rightBarButtonItems![1].isEnabled = true
+            navigationItem.rightBarButtonItems![1].tintColor = .red
+        }
+    }
+    
+    private func setupKeyboardObservers()
     {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    @objc func handleKeyboardWillShow(_ notification: Notification)
+    @objc private func handleKeyboardWillShow(_ notification: Notification)
     {
         let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue
@@ -178,7 +202,7 @@ class BookDetailViewController: UIViewController
         }
     }
     
-    @objc func handleKeyboardWillHide(_ notification: Notification)
+    @objc private func handleKeyboardWillHide(_ notification: Notification)
     {
         let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
         
@@ -187,6 +211,35 @@ class BookDetailViewController: UIViewController
         UIView.animate(withDuration: keyboardDuration!, animations: {
                 self.view.layoutIfNeeded()
         })
+    }
+    
+    @objc private func handleDelete()
+    {
+        let alert = UIAlertController(title: "Are you sure you want to remove \(book?.title ?? "") from your bookshelf?", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (_) in
+            
+            guard let book = self.book, let bookshelf = book.bookshelf else {
+                NSLog("Error unwrapping book for deletion")
+                return
+            }
+            
+            self.bookController?.delete(book: book, from: bookshelf, completion: { (error) in
+                
+                if error != nil
+                {
+                    self.showAlert(with: "An error occured while deleting your book, please try again!")
+                    return
+                }
+                
+                DispatchQueue.main.async {
+                    self.bookController?.deleteFromCoreData(book: book)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            })
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
     }
     
     @objc private func handleSave()
@@ -199,7 +252,7 @@ class BookDetailViewController: UIViewController
         {
             guard let review = bookReviewTextView.text, let book = book else { return }
             let bookshelf = bookshelfIndexString(from: bookshelfSegmentedControl.selectedSegmentIndex)
-            bookController?.updateReview(on: book, with: review, bookshelf: bookshelf)
+            bookController?.update(on: book, with: review, bookshelf: bookshelf)
             navigationController?.popViewController(animated: true)
         }
     }
@@ -241,17 +294,18 @@ class BookDetailViewController: UIViewController
         })
     }
     
+    //helper function
     private func bookshelfIndexString(from index: Int) -> String
     {
         switch index {
         case 0:
-            return "0"
+            return Bookshelf.favourites.rawValue
         case 1:
-            return "3"
+            return Bookshelf.readingNow.rawValue
         case 2:
-            return "2"
+            return Bookshelf.toRead.rawValue
         case 3:
-            return "4"
+            return Bookshelf.haveRead.rawValue
         default:
             return ""
         }
@@ -267,9 +321,12 @@ class BookDetailViewController: UIViewController
             }
             
             titleLabel.text = bookRep.volumeInfo?.title
-            authorLabel.text = bookRep.volumeInfo?.authors![0]
+            if let author = bookRep.volumeInfo?.authors![0]
+            {
+                authorLabel.text = "By \(author)"
+            }
             dateLabel.text = bookRep.volumeInfo?.publishedDate
-            publisherLabel.text = bookRep.volumeInfo?.publisher
+            publisherLabel.text = "Published by\n\(bookRep.volumeInfo?.publisher ?? "")"
             bookDescriptionTextView.text = bookRep.volumeInfo?.bookDescription
         }
         else if let book = book
@@ -294,13 +351,15 @@ class BookDetailViewController: UIViewController
             }
             
             titleLabel.text = book.title
-            authorLabel.text = book.author
+            authorLabel.text = "By \(book.author ?? "")"
             dateLabel.text = book.publishedDate
-            publisherLabel.text = book.publisher
+            publisherLabel.text = ("Published by\n\(book.publisher ?? "")")
             bookDescriptionTextView.text = book.bookDescription
             bookReviewTextView.text = book.review
         }
     }
+    
+    //MARK: - AutoLayout
     
     var reviewTextViewBottomAnchor: NSLayoutConstraint?
     
@@ -311,6 +370,9 @@ class BookDetailViewController: UIViewController
         view.addSubview(scrollView)
         scrollView.addSubview(coverImageView)
         scrollView.addSubview(titleLabel)
+        scrollView.addSubview(authorLabel)
+        scrollView.addSubview(publisherLabel)
+        scrollView.addSubview(dateLabel)
         scrollView.addSubview(bookshelfSegmentedControl)
         scrollView.addSubview(bookDescriptionTitleLabel)
         scrollView.addSubview(bookDescriptionTextView)
@@ -323,15 +385,14 @@ class BookDetailViewController: UIViewController
         
         titleLabel.anchor(top: coverImageView.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 8, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 0)
         
-        let horizontalStackView = UIStackView(arrangedSubviews: [authorLabel, dateLabel, publisherLabel])
-        horizontalStackView.axis = .horizontal
-        horizontalStackView.distribution = .fillEqually
-        horizontalStackView.spacing = 0
+        authorLabel.anchor(top: titleLabel.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width / 2, height: 0)
         
-        scrollView.addSubview(horizontalStackView)
-        horizontalStackView.anchor(top: titleLabel.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 12, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 40)
+        publisherLabel.anchor(top: titleLabel.bottomAnchor, left: authorLabel.rightAnchor, bottom: nil, right: nil, paddingTop: 0, paddingLeft: 0, paddingRight: 12, paddingBottom: 0, width: width / 2, height: 0)
         
-        bookshelfSegmentedControl.anchor(top: horizontalStackView.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 22, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 30)
+        dateLabel.anchor(top: publisherLabel.bottomAnchor, left: nil, bottom: nil, right: nil, paddingTop: 4, paddingLeft: 0, paddingRight: 12, paddingBottom: 0, width: width / 2, height: 0)
+        dateLabel.centerXAnchor.constraint(equalTo: publisherLabel.centerXAnchor).isActive = true
+        
+        bookshelfSegmentedControl.anchor(top: dateLabel.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 22, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: width, height: 30)
         
         bookDescriptionTitleLabel.anchor(top: bookshelfSegmentedControl.bottomAnchor, left: scrollView.leftAnchor, bottom: nil, right: nil, paddingTop: 22, paddingLeft: 12, paddingRight: 0, paddingBottom: 0, width: 0, height: 0)
         

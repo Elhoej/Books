@@ -10,6 +10,8 @@ import UIKit
 
 class SearchCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout, UISearchBarDelegate
 {
+    //MARK: - Properties
+    
     let cellId = "bookCell"
     var bookController: BookController?
     
@@ -25,12 +27,19 @@ class SearchCollectionViewController: UICollectionViewController, UICollectionVi
         return sb
     }()
     
+    //MARK: - Functions
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
         title = "Search"
-        setupCollectionView()
         
+        hideKeyboardWhenTappedAround()
+        setupCollectionView()
+        setupSearchBar()
+    }
+    private func setupSearchBar()
+    {
         view.addSubview(searchBar)
         searchBar.anchor(top: view.topAnchor, left: view.leftAnchor, bottom: nil, right: view.rightAnchor, paddingTop: 0, paddingLeft: 0, paddingRight: 0, paddingBottom: 0, width: 0, height: 45)
     }
@@ -60,6 +69,8 @@ class SearchCollectionViewController: UICollectionViewController, UICollectionVi
             }
         })
     }
+    
+    //MARK: - CollectionView Delegate & DataSource
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     {
