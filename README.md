@@ -13,3 +13,10 @@ https://www.youtube.com/watch?v=C2Oo-SvBFWM&feature=youtu.be
 - Local persistence using Core Data
 - Synchronization
 - Add review (only local, not supported by Google Books API)
+
+## Technologies/Methodologies
+- Swift
+- MVC
+- Programmatic UserInterface
+- Core Data
+- Google Books API
